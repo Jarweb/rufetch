@@ -1,6 +1,6 @@
 ### intro
 
-a lightweight fetch lib with middleware inspire by koa
+a lightweight fetch lib with middleware inspired by koa
 
 
 
@@ -38,18 +38,18 @@ const createReps = (name, data) => {
 
 ```code
 http.use(async (ctx: any, next: any) => {
-	await next()
-	const {error} = ctx.res
+  await next()
+  const {error} = ctx.res
 
-	if (error?.status >= 400 && error?.status < 500) {
-		console.error('client error')
-	}
-	if (error?.status >= 500) {
-		console.error('server error')
-	}
+  if (error?.status >= 400 && error?.status < 500) {
+    console.error('client error')
+  }
+  if (error?.status >= 500) {
+    console.error('server error')
+  }
   if (error === 'fetch timeout') {
-		console.error('fetch timeout')
-	}
+    console.error('fetch timeout')
+  }
 })
 
 ```
