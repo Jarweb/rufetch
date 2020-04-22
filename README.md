@@ -37,6 +37,7 @@ const createReps = (name, data) => {
   - fetch
 
 ```code
+// error middleware
 http.use(async (ctx: any, next: any) => {
   await next()
   const {error} = ctx.res
@@ -50,6 +51,13 @@ http.use(async (ctx: any, next: any) => {
   if (error === 'fetch timeout') {
     console.error('fetch timeout')
   }
+})
+
+// token middleware
+http.use(async (ctx: any, next: any) => {
+  const token = await getToken()
+  ctx.requestInit.setHeaders(token, token)
+  await next()
 })
 
 ```
