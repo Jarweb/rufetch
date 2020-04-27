@@ -91,4 +91,10 @@ http.use(async (ctx: any, next: any) => {
 - instance.put
 - instance.delete
 - instance.head
-- instance.use: add middleware
+- instance.use
+  - add middleware
+  - ctx
+    - req
+    - request
+    - res
+    - response

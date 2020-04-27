@@ -6,7 +6,7 @@ interface RufetchOption {
 	baseURL?: string,
 	timeout?: number,
 	// like get...
-	params?: RequestInit['body'], 
+	params?: RequestInit['body'],
 	// like post
 	data?: RequestInit['body'],
 	// arrayBuffer, blob, json, text, formData, stream..., default json
@@ -36,8 +36,8 @@ export default class Rufetch {
 	private options: RufetchOption = {}
 	private middlewares: Function[] = []
 
-	constructor(options: RufetchOption) {
-		this.options = options
+	constructor(options?: RufetchOption) {
+		this.options = options || {}
 	}
 
 	use = (middleware: any) => {
@@ -45,8 +45,8 @@ export default class Rufetch {
 		return this
 	}
 
-	preRequest = (method: string) => {
-		return ( url: string, rufetch?: RufetchOption) => {
+	preRequest = (httpMethod: string) => {
+		return (url: string, rufetch?: RufetchOption) => {
 			const {
 				baseURL: defaultBaseURL,
 				timeout: defaultTimeout,
@@ -67,10 +67,10 @@ export default class Rufetch {
 				referrerPolicy: defaultReferrerPolicy,
 				signal: defaultSignal,
 				window: defaultWindow,
-				...defaultRest 
+				...defaultRest
 			} = this.options
 
-			const { 
+			const {
 				baseURL,
 				timeout,
 				params,
@@ -90,9 +90,9 @@ export default class Rufetch {
 				referrerPolicy,
 				signal,
 				window,
-				...restOptions 
+				...restOptions
 			} = rufetch || {}
-			
+
 			const defaultRequestInit: RequestInit = {
 				body: defaultBody,
 				cache: defaultCache,
@@ -123,7 +123,7 @@ export default class Rufetch {
 				signal,
 				window,
 			}
-			requestInit.method = method
+			requestInit.method = httpMethod
 
 			const middlewares = [
 				...this.middlewares,
@@ -135,14 +135,19 @@ export default class Rufetch {
 			const rurl = url.indexOf(defaultBaseURL || '') > -1 ? url : defaultBaseURL + url
 			const reqInit = Object.assign({}, defaultRequestInit, requestInit)
 			const rbody = Object.assign({}, data, body)
-			
+
 			reqInit.body = rbody ? rbody : defaultBody
 			reqInit.headers = Object.assign({}, defaultHeaders, headers)
 
+			if (['get', 'head'].indexOf(httpMethod.toLowerCase()) > -1) {
+				reqInit.body = null
+			}
+
 			ctx.req = {
 				url: rurl,
-				method,
-				timeout: timeout ? timeout : (defaultTimeout || 3000),
+				method: httpMethod,
+				cacheOptions,
+				timeout: timeout ? timeout : (defaultTimeout || 15000),
 				params: params ? params : defaultParams,
 				requestInit: reqInit,
 				...Object.assign({}, defaultRest, restOptions),
@@ -167,4 +172,3 @@ export default class Rufetch {
 	delete = this.preRequest('delete')
 	head = this.preRequest('head')
 }
-
