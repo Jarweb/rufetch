@@ -57,7 +57,7 @@ http.use(async (ctx: any, next: any) => {
 ```code
 http.use(async (ctx: any, next: any) => {
   const token = await getToken()
-  ctx.requestInit.setHeaders(token, token)
+  ctx.req.requestInit.setHeaders(token, token)
   await next()
 })
 ```
