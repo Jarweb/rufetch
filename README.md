@@ -13,7 +13,7 @@ yarn add @jarzzzi/rufetch
 
 ### example
 
-```code
+```javascript
 const http = new Rufetch({
   baseURL: 'https://github.com/api',
 })
@@ -37,7 +37,7 @@ const createReps = (name, data) => {
   - fetch
 
 - error middleware
-```code
+```javascript
 http.use(async (ctx: any, next: any) => {
   await next()
   const {error} = ctx.res
@@ -54,7 +54,7 @@ http.use(async (ctx: any, next: any) => {
 })
 ```
 - token middleware
-```code
+```javascript
 http.use(async (ctx: any, next: any) => {
   const token = await getToken()
   ctx.req.requestInit.setHeaders(token, token)
